@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class GuestService {
     }
 
     public List<GuestDTO> findAllGuests() {
-        return guestRepository.findAll().stream().map(guestMapper::map).collect(Collectors.toList());
+        return guestMapper.map(guestRepository.findAll());
     }
 
     public GuestDTO createGuest(final GuestDTO guestDTO) {
