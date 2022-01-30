@@ -1,23 +1,45 @@
 package com.tenniscourts.reservations;
 
+import com.tenniscourts.exceptions.AlreadyExistsEntityException;
 import com.tenniscourts.exceptions.EntityNotFoundException;
-import lombok.AllArgsConstructor;
+import com.tenniscourts.guests.Guest;
+import com.tenniscourts.guests.GuestRepository;
+import com.tenniscourts.schedules.Schedule;
+import com.tenniscourts.schedules.ScheduleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-
+    private final GuestRepository guestRepository;
+    private final ScheduleRepository scheduleRepository;
     private final ReservationMapper reservationMapper;
 
-    public ReservationDTO bookReservation(CreateReservationRequestDTO createReservationRequestDTO) {
-        throw new UnsupportedOperationException();
+    public ReservationDTO bookReservation(final CreateReservationRequestDTO dto) {
+
+        final Guest guest = guestRepository.findById(dto.getGuestId()).orElseThrow(() -> new EntityNotFoundException(String.format("Guest not found for id = %s.", dto.getGuestId())));
+        final Schedule schedule = scheduleRepository.findById(dto.getScheduleId()).orElseThrow(() -> new EntityNotFoundException(String.format("Schedule not found for id = %s.", dto.getScheduleId())));
+
+        final Optional<Reservation> existingReservation = reservationRepository.findReservationByReservationStatusAndGuestIdAndScheduleId(ReservationStatus.READY_TO_PLAY, guest.getId(), schedule.getId());
+        if (existingReservation.isPresent()) {
+            throw new AlreadyExistsEntityException(String.format("Reservation already exists for reservation status = %s, guest id = %s, schedule id = %s.", ReservationStatus.READY_TO_PLAY, guest.getId(), schedule.getId()));
+        }
+
+        final Reservation reservation = new Reservation();
+        reservation.setGuest(guest);
+        reservation.setSchedule(schedule);
+        reservation.setValue(new BigDecimal(0));
+        reservation.setReservationStatus(ReservationStatus.READY_TO_PLAY);
+        schedule.addReservation(reservation);
+        return reservationMapper.map(reservationRepository.save(reservation));
     }
 
     public ReservationDTO findReservation(Long reservationId) {
