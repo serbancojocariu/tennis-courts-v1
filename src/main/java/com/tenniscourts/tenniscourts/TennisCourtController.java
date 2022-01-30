@@ -1,26 +1,33 @@
 package com.tenniscourts.tenniscourts;
 
 import com.tenniscourts.config.BaseRestController;
-import lombok.AllArgsConstructor;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@AllArgsConstructor
+@RestController
+@RequestMapping(path = "/tennis-courts")
+@RequiredArgsConstructor
 public class TennisCourtController extends BaseRestController {
 
     private final TennisCourtService tennisCourtService;
 
-    //TODO: implement rest and swagger
-    public ResponseEntity<Void> addTennisCourt(TennisCourtDTO tennisCourtDTO) {
+    @PostMapping
+    @ApiOperation(value = "Create tennis court.")
+    public ResponseEntity<Void> addTennisCourt(@RequestBody final TennisCourtDTO tennisCourtDTO) {
         return ResponseEntity.created(locationByEntity(tennisCourtService.addTennisCourt(tennisCourtDTO).getId())).build();
     }
 
-    //TODO: implement rest and swagger
-    public ResponseEntity<TennisCourtDTO> findTennisCourtById(Long tennisCourtId) {
-        return ResponseEntity.ok(tennisCourtService.findTennisCourtById(tennisCourtId));
+    @GetMapping(path = "{id}")
+    @ApiOperation(value = "Find tennis court by id.")
+    public ResponseEntity<TennisCourtDTO> findTennisCourtById(@PathVariable final Long id) {
+        return ResponseEntity.ok(tennisCourtService.findTennisCourtById(id));
     }
 
-    //TODO: implement rest and swagger
-    public ResponseEntity<TennisCourtDTO> findTennisCourtWithSchedulesById(Long tennisCourtId) {
-        return ResponseEntity.ok(tennisCourtService.findTennisCourtWithSchedulesById(tennisCourtId));
+    @GetMapping(path = "with-schedules/{id}")
+    @ApiOperation(value = "Find tennis court with schedules by id.")
+    public ResponseEntity<TennisCourtDTO> findTennisCourtWithSchedulesById(@PathVariable final Long id) {
+        return ResponseEntity.ok(tennisCourtService.findTennisCourtWithSchedulesById(id));
     }
 }

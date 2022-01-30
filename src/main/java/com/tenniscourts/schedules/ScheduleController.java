@@ -1,21 +1,26 @@
 package com.tenniscourts.schedules;
 
 import com.tenniscourts.config.BaseRestController;
-import lombok.AllArgsConstructor;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-@AllArgsConstructor
+@RestController
+@RequestMapping(path = "/schedules")
+@RequiredArgsConstructor
 public class ScheduleController extends BaseRestController {
 
     private final ScheduleService scheduleService;
 
-    //TODO: implement rest and swagger
-    public ResponseEntity<Void> addScheduleTennisCourt(CreateScheduleRequestDTO createScheduleRequestDTO) {
+    @PostMapping
+    @ApiOperation(value = "Create schedule for a tennis court.")
+    public ResponseEntity<Void> addScheduleTennisCourt(@RequestBody final CreateScheduleRequestDTO createScheduleRequestDTO) {
         return ResponseEntity.created(locationByEntity(scheduleService.addSchedule(createScheduleRequestDTO.getTennisCourtId(), createScheduleRequestDTO).getId())).build();
     }
 
@@ -25,8 +30,9 @@ public class ScheduleController extends BaseRestController {
         return ResponseEntity.ok(scheduleService.findSchedulesByDates(LocalDateTime.of(startDate, LocalTime.of(0, 0)), LocalDateTime.of(endDate, LocalTime.of(23, 59))));
     }
 
-    //TODO: implement rest and swagger
-    public ResponseEntity<ScheduleDTO> findByScheduleId(Long scheduleId) {
-        return ResponseEntity.ok(scheduleService.findSchedule(scheduleId));
+    @GetMapping(path = "{id}")
+    @ApiOperation(value = "Find schedule by id.")
+    public ResponseEntity<ScheduleDTO> findByScheduleId(@PathVariable final Long id) {
+        return ResponseEntity.ok(scheduleService.findScheduleById(id));
     }
 }

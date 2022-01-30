@@ -1,22 +1,40 @@
 package com.tenniscourts.schedules;
 
-import lombok.AllArgsConstructor;
+import com.tenniscourts.exceptions.AlreadyExistsEntityException;
+import com.tenniscourts.exceptions.EntityNotFoundException;
+import com.tenniscourts.tenniscourts.TennisCourt;
+import com.tenniscourts.tenniscourts.TennisCourtRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-
+    private final TennisCourtRepository tennisCourtRepository;
     private final ScheduleMapper scheduleMapper;
 
-    public ScheduleDTO addSchedule(Long tennisCourtId, CreateScheduleRequestDTO createScheduleRequestDTO) {
-        //TODO: implement addSchedule
-        return null;
+    public ScheduleDTO addSchedule(final Long tennisCourtId, final CreateScheduleRequestDTO createScheduleRequestDTO) {
+
+        final Optional<TennisCourt> optionalTennisCourt = tennisCourtRepository.findById(tennisCourtId);
+        return optionalTennisCourt.map(tennisCourt -> {
+            final Schedule schedule = new Schedule();
+            schedule.setTennisCourt(tennisCourt);
+            schedule.setStartDateTime(createScheduleRequestDTO.getStartDateTime().truncatedTo(ChronoUnit.MINUTES));
+            schedule.setEndDateTime(schedule.getStartDateTime().plusHours(1));
+
+            final Optional<Schedule> existingSchedule = scheduleRepository.findScheduleByTennisCourtAndStartDateTimeAndEndDateTime(tennisCourt, schedule.getStartDateTime(), schedule.getEndDateTime());
+            if (existingSchedule.isPresent()) {
+                throw new AlreadyExistsEntityException(String.format("Schedule already exists for tennis court id = %s, startDateTime = %s and endDateTime = %s.", tennisCourtId, schedule.getStartDateTime(), schedule.getEndDateTime()));
+            }
+            return scheduleMapper.map(scheduleRepository.save(schedule));
+        }).orElseThrow(() -> new EntityNotFoundException(String.format("Tennis court not found for id = %s.", tennisCourtId)));
     }
 
     public List<ScheduleDTO> findSchedulesByDates(LocalDateTime startDate, LocalDateTime endDate) {
@@ -24,9 +42,8 @@ public class ScheduleService {
         return null;
     }
 
-    public ScheduleDTO findSchedule(Long scheduleId) {
-        //TODO: implement
-        return null;
+    public ScheduleDTO findScheduleById(final Long id) {
+        return scheduleRepository.findById(id).map(scheduleMapper::map).orElseThrow(() -> new EntityNotFoundException(String.format("Schedule not found for id = %s.", id)));
     }
 
     public List<ScheduleDTO> findSchedulesByTennisCourtId(Long tennisCourtId) {
