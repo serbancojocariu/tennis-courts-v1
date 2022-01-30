@@ -2,6 +2,9 @@ package com.tenniscourts.schedules;
 
 import com.tenniscourts.exceptions.AlreadyExistsEntityException;
 import com.tenniscourts.exceptions.EntityNotFoundException;
+import com.tenniscourts.reservations.Reservation;
+import com.tenniscourts.reservations.ReservationRepository;
+import com.tenniscourts.reservations.ReservationStatus;
 import com.tenniscourts.tenniscourts.TennisCourt;
 import com.tenniscourts.tenniscourts.TennisCourtRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +21,7 @@ import java.util.Optional;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final ReservationRepository reservationRepository;
     private final TennisCourtRepository tennisCourtRepository;
     private final ScheduleMapper scheduleMapper;
 
@@ -37,9 +42,14 @@ public class ScheduleService {
         }).orElseThrow(() -> new EntityNotFoundException(String.format("Tennis court not found for id = %s.", tennisCourtId)));
     }
 
-    public List<ScheduleDTO> findSchedulesByDates(LocalDateTime startDate, LocalDateTime endDate) {
-        //TODO: implement
-        return null;
+    public List<ScheduleDTO> findSchedulesByDates(final LocalDateTime startDate, final LocalDateTime endDate) {
+        final List<Reservation> reservations = reservationRepository.findAllByReservationStatusIn(Arrays.asList(ReservationStatus.RESCHEDULED, ReservationStatus.CANCELLED));
+        return scheduleMapper.map(scheduleRepository.findScheduleByStartDateTimeAfterAndEndDateTimeBeforeAndReservationsNullOrReservationsIn(startDate, endDate, reservations));
+    }
+
+    public List<ScheduleDTO> findAllFreeSchedules() {
+        final List<Reservation> reservations = reservationRepository.findAllByReservationStatusIn(Arrays.asList(ReservationStatus.RESCHEDULED, ReservationStatus.CANCELLED));
+        return scheduleMapper.map(scheduleRepository.findScheduleByReservationsNullOrReservationsIn(reservations));
     }
 
     public ScheduleDTO findScheduleById(final Long id) {
