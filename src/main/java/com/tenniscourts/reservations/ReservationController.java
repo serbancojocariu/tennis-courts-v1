@@ -31,7 +31,8 @@ public class ReservationController extends BaseRestController {
         return ResponseEntity.ok(reservationService.cancelReservation(id));
     }
 
-    public ResponseEntity<ReservationDTO> rescheduleReservation(Long reservationId, Long scheduleId) {
+    @PutMapping(path = "reschedule/{reservationId}/{scheduleId}")
+    public ResponseEntity<ReservationDTO> rescheduleReservation(@PathVariable final Long reservationId, @PathVariable final Long scheduleId) {
         return ResponseEntity.ok(reservationService.rescheduleReservation(reservationId, scheduleId));
     }
 }
