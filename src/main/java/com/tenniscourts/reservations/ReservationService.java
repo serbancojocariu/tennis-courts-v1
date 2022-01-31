@@ -7,12 +7,14 @@ import com.tenniscourts.guests.GuestRepository;
 import com.tenniscourts.schedules.Schedule;
 import com.tenniscourts.schedules.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -140,5 +142,13 @@ public class ReservationService {
         if (reservation.getSchedule().getEndDateTime().isAfter(LocalDateTime.now())) {
             throw new IllegalArgumentException("Can't complete future dates.");
         }
+    }
+
+    @Scheduled(cron = "*/30 * * * * *")
+    public void cancelPastReservations() {
+        final List<Reservation> reservations = reservationRepository.findReservationsByScheduleStartDateBeforeNow(LocalDateTime.now());
+        reservations.forEach(reservation -> {
+            updateReservation(reservation, new BigDecimal(0), ReservationStatus.UNATTENDED_USER);
+        });
     }
 }

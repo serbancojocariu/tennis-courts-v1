@@ -4,5 +4,6 @@ public enum ReservationStatus {
   READY_TO_PLAY,
   CANCELLED,
   RESCHEDULED,
-  COMPLETED
+  COMPLETED,
+  UNATTENDED_USER
 }
