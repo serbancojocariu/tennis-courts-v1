@@ -35,4 +35,10 @@ public class ReservationController extends BaseRestController {
     public ResponseEntity<ReservationDTO> rescheduleReservation(@PathVariable final Long reservationId, @PathVariable final Long scheduleId) {
         return ResponseEntity.ok(reservationService.rescheduleReservation(reservationId, scheduleId));
     }
+
+    @PutMapping("complete/{id}")
+    @ApiOperation(value = "Complete reservation by id.")
+    public ResponseEntity<ReservationDTO> completeReservation(@PathVariable final Long id) {
+        return ResponseEntity.ok(reservationService.completeReservation(id));
+    }
 }

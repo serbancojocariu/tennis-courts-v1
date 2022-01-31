@@ -24,6 +24,8 @@ public class ReservationService {
     private final ScheduleRepository scheduleRepository;
     private final ReservationMapper reservationMapper;
 
+    private static final Long RESERVATION_DEPOSIT = 10L;
+
     public ReservationDTO bookReservation(final CreateReservationRequestDTO dto) {
 
         final Guest guest = guestRepository.findById(dto.getGuestId()).orElseThrow(() -> new EntityNotFoundException(String.format("Guest not found for id = %s.", dto.getGuestId())));
@@ -37,7 +39,7 @@ public class ReservationService {
         final Reservation reservation = new Reservation();
         reservation.setGuest(guest);
         reservation.setSchedule(schedule);
-        reservation.setValue(new BigDecimal(0));
+        reservation.setValue(new BigDecimal(RESERVATION_DEPOSIT));
         reservation.setReservationStatus(ReservationStatus.READY_TO_PLAY);
         schedule.addReservation(reservation);
         return reservationMapper.map(reservationRepository.save(reservation));
@@ -90,8 +92,6 @@ public class ReservationService {
         return BigDecimal.ZERO;
     }
 
-    /*TODO: This method actually not fully working, find a way to fix the issue when it's throwing the error:
-            "Cannot reschedule to the same slot.*/
     @Transactional
     public ReservationDTO rescheduleReservation(final Long previousReservationId, final Long scheduleId) {
         final Reservation previousReservation = cancel(previousReservationId);
@@ -109,5 +109,30 @@ public class ReservationService {
                 .build());
         newReservation.setPreviousReservation(reservationMapper.map(previousReservation));
         return newReservation;
+    }
+
+    public ReservationDTO completeReservation(final Long reservationId) {
+        return reservationMapper.map(this.complete(reservationId));
+    }
+
+    private Reservation complete(final Long reservationId) {
+        return reservationRepository.findById(reservationId).map(reservation -> {
+
+            this.validateComplete(reservation);
+
+            final BigDecimal refundValue = new BigDecimal(RESERVATION_DEPOSIT);
+            return this.updateReservation(reservation, refundValue, ReservationStatus.COMPLETED);
+
+        }).orElseThrow(() -> new EntityNotFoundException(String.format("Reservation not found for id = %s.", reservationId)));
+    }
+
+    private void validateComplete(final Reservation reservation) {
+        if (!ReservationStatus.READY_TO_PLAY.equals(reservation.getReservationStatus())) {
+            throw new IllegalArgumentException("Cannot complete the reservation because it's not in ready to play status.");
+        }
+
+        if (reservation.getSchedule().getEndDateTime().isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Can't complete future dates.");
+        }
     }
 }
