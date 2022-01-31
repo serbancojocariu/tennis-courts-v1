@@ -16,3 +16,4 @@ insert into schedule (id, start_date_time, end_date_time, tennis_court_id) value
 insert into schedule (id, start_date_time, end_date_time, tennis_court_id) values (null, '2022-01-31T15:00:00.0', '2022-01-31T16:00:00.0', 3);
 insert into schedule (id, start_date_time, end_date_time, tennis_court_id) values (null, '2022-01-31T17:00:00.0', '2022-01-31T18:00:00.0', 4);
 insert into schedule (id, start_date_time, end_date_time, tennis_court_id) values (null, '2022-01-31T02:00:00.0', '2022-01-31T03:00:00.0', 5);
+insert into schedule (id, start_date_time, end_date_time, tennis_court_id) values (null, '2022-02-11T17:00:00.0', '2022-02-11T18:00:00.0', 4);
