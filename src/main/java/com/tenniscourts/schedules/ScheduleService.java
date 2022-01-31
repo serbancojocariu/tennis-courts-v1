@@ -25,21 +25,21 @@ public class ScheduleService {
     private final TennisCourtRepository tennisCourtRepository;
     private final ScheduleMapper scheduleMapper;
 
-    public ScheduleDTO addSchedule(final Long tennisCourtId, final CreateScheduleRequestDTO createScheduleRequestDTO) {
+    public ScheduleDTO addSchedule(final CreateScheduleRequestDTO dto) {
 
-        final Optional<TennisCourt> optionalTennisCourt = tennisCourtRepository.findById(tennisCourtId);
+        final Optional<TennisCourt> optionalTennisCourt = tennisCourtRepository.findById(dto.getTennisCourtId());
         return optionalTennisCourt.map(tennisCourt -> {
             final Schedule schedule = new Schedule();
             schedule.setTennisCourt(tennisCourt);
-            schedule.setStartDateTime(createScheduleRequestDTO.getStartDateTime().truncatedTo(ChronoUnit.MINUTES));
+            schedule.setStartDateTime(dto.getStartDateTime().truncatedTo(ChronoUnit.MINUTES));
             schedule.setEndDateTime(schedule.getStartDateTime().plusHours(1));
 
             final Optional<Schedule> existingSchedule = scheduleRepository.findScheduleByTennisCourtAndStartDateTimeAndEndDateTime(tennisCourt, schedule.getStartDateTime(), schedule.getEndDateTime());
             if (existingSchedule.isPresent()) {
-                throw new AlreadyExistsEntityException(String.format("Schedule already exists for tennis court id = %s, startDateTime = %s and endDateTime = %s.", tennisCourtId, schedule.getStartDateTime(), schedule.getEndDateTime()));
+                throw new AlreadyExistsEntityException(String.format("Schedule already exists for tennis court id = %s, startDateTime = %s and endDateTime = %s.", dto.getTennisCourtId(), schedule.getStartDateTime(), schedule.getEndDateTime()));
             }
             return scheduleMapper.map(scheduleRepository.save(schedule));
-        }).orElseThrow(() -> new EntityNotFoundException(String.format("Tennis court not found for id = %s.", tennisCourtId)));
+        }).orElseThrow(() -> new EntityNotFoundException(String.format("Tennis court not found for id = %s.", dto.getTennisCourtId())));
     }
 
     public List<ScheduleDTO> findSchedulesByDates(final LocalDateTime startDate, final LocalDateTime endDate) {

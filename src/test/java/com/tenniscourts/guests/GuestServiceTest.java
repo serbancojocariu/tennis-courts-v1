@@ -8,17 +8,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
-@ContextConfiguration(classes = GuestService.class)
 public class GuestServiceTest {
 
     @InjectMocks

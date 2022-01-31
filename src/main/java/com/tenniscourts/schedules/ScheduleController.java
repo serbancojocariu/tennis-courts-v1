@@ -20,7 +20,7 @@ public class ScheduleController extends BaseRestController {
     @PostMapping
     @ApiOperation(value = "Create schedule for a tennis court.")
     public ResponseEntity<Void> addScheduleTennisCourt(@RequestBody final CreateScheduleRequestDTO createScheduleRequestDTO) {
-        return ResponseEntity.created(locationByEntity(scheduleService.addSchedule(createScheduleRequestDTO.getTennisCourtId(), createScheduleRequestDTO).getId())).build();
+        return ResponseEntity.created(locationByEntity(scheduleService.addSchedule(createScheduleRequestDTO).getId())).build();
     }
 
     @GetMapping(path = "dates")
