@@ -20,5 +20,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByReservationStatusIn(List<ReservationStatus> status);
 
     @Query(value = "select r from Reservation as r join Schedule as s on r.schedule.id = s.id where s.endDateTime < ?1")
-    List<Reservation> findReservationsByScheduleStartDateBeforeNow(LocalDateTime localDateTime);
+    List<Reservation> findReservationsByScheduleEndDateBeforeNow(LocalDateTime localDateTime);
 }

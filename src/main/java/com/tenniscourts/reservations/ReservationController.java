@@ -3,8 +3,12 @@ package com.tenniscourts.reservations;
 import com.tenniscourts.config.BaseRestController;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/reservations")
@@ -40,5 +44,11 @@ public class ReservationController extends BaseRestController {
     @ApiOperation(value = "Complete reservation by id.")
     public ResponseEntity<ReservationDTO> completeReservation(@PathVariable final Long id) {
         return ResponseEntity.ok(reservationService.completeReservation(id));
+    }
+
+    @GetMapping(path = "history")
+    @ApiOperation(value = "Find past reservations.")
+    public ResponseEntity<List<ReservationDTO>> findPastReservations() {
+        return ResponseEntity.ok(reservationService.findPastReservations());
     }
 }

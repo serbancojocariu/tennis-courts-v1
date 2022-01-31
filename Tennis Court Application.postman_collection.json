@@ -1,0 +1,970 @@
+{
+	"info": {
+		"_postman_id": "eb60ad53-75a1-4980-84d2-418156d13599",
+		"name": "Tennis Court Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Guest",
+			"item": [
+				{
+					"name": "Find Guest By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"number\"\r",
+									"        },\r",
+									"        \"name\": {\r",
+									"            \"type\": \"string\"\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"id\", \"name\"]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/guests/{{GUEST_ID}}",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"guests",
+								"{{GUEST_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Guest By Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"number\"\r",
+									"        },\r",
+									"        \"name\": {\r",
+									"            \"type\": \"string\"\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"id\", \"name\"]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/guests/name?name={{GUEST_NAME}}",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"guests",
+								"name"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{GUEST_NAME}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Guests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"array\",\r",
+									"    \"items\": [{\r",
+									"        \"type\": \"object\",\r",
+									"        \"properties\": {\r",
+									"            \"id\": {\r",
+									"                \"type\": \"number\"\r",
+									"            },\r",
+									"            \"name\": {\r",
+									"                \"type\": \"string\"\r",
+									"            }\r",
+									"        },\r",
+									"        \"required\": [\"id\", \"name\"]\r",
+									"    }]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/guests",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"guests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Guest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {\r",
+									"  pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Player\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/guests",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"guests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Guest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"number\"\r",
+									"        },\r",
+									"        \"name\": {\r",
+									"            \"type\": \"string\"\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"id\", \"name\"]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 5,\r\n    \"name\": \"New Player Updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/guests",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"guests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Guest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", () => {\r",
+									"  pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/guests/6",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"guests",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TennisCourt",
+			"item": [
+				{
+					"name": "Find Tennis Court by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"number\"\r",
+									"        },\r",
+									"        \"name\": {\r",
+									"            \"type\": \"string\"\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"id\", \"name\"]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/tennis-courts/{{TENNIS_COURT_ID}}",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"tennis-courts",
+								"{{TENNIS_COURT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Tennis Court with Schedules by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"number\"\r",
+									"        },\r",
+									"        \"name\": {\r",
+									"            \"type\": \"string\"\r",
+									"        },\r",
+									"        \"tennisCourtSchedules\": {\r",
+									"            \"type\": \"array\",\r",
+									"            \"items\": [{\r",
+									"                \"type\": \"object\",\r",
+									"                \"properties\": {\r",
+									"                    \"id\": {\r",
+									"                        \"type\": \"number\"\r",
+									"                    },\r",
+									"                    \"tennisCourt\": {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"properties\": {\r",
+									"                            \"id\": {\r",
+									"                                \"type\": \"number\"\r",
+									"                            },\r",
+									"                            \"name\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            }\r",
+									"                        },\r",
+									"                        \"required\": [\"id\", \"name\"]\r",
+									"                    },\r",
+									"                    \"startDateTime\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"endDateTime\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    }\r",
+									"                },\r",
+									"                \"required\": [\"id\", \"tennisCourt\", \"startDateTime\", \"endDateTime\"]\r",
+									"            }]\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"id\", \"name\", \"tennisCourtSchedules\"]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/tennis-courts/with-schedules/{{TENNIS_COURT_ID_WITH_SCHEDULES}}",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"tennis-courts",
+								"with-schedules",
+								"{{TENNIS_COURT_ID_WITH_SCHEDULES}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Tennis Court",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {\r",
+									"  pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Tennis Court\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/tennis-courts",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"tennis-courts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Schedule",
+			"item": [
+				{
+					"name": "Find Schedule by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"number\"\r",
+									"        },\r",
+									"        \"tennisCourt\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                \"id\": {\r",
+									"                    \"type\": \"number\"\r",
+									"                },\r",
+									"                \"name\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                }\r",
+									"            },\r",
+									"            \"required\": [\"id\", \"name\"]\r",
+									"        },\r",
+									"        \"startDateTime\": {\r",
+									"            \"type\": \"string\"\r",
+									"        },\r",
+									"        \"endDateTime\": {\r",
+									"            \"type\": \"string\"\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"id\", \"tennisCourt\", \"startDateTime\", \"endDateTime\"]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/schedules/{{SCHEDULE_ID}}",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"schedules",
+								"{{SCHEDULE_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Schedule by dates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"array\",\r",
+									"    \"items\": [{\r",
+									"        \"type\": \"object\",\r",
+									"        \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"number\"\r",
+									"        },\r",
+									"        \"tennisCourt\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                \"id\": {\r",
+									"                    \"type\": \"number\"\r",
+									"                },\r",
+									"                \"name\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                }\r",
+									"            },\r",
+									"            \"required\": [\"id\", \"name\"]\r",
+									"        },\r",
+									"        \"startDateTime\": {\r",
+									"            \"type\": \"string\"\r",
+									"        },\r",
+									"        \"endDateTime\": {\r",
+									"            \"type\": \"string\"\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"id\", \"tennisCourt\", \"startDateTime\", \"endDateTime\"]\r",
+									"    }]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/schedules/dates?startDate=2022-01-31 11:00:00&endDate=2022-01-31 17:00:00",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"schedules",
+								"dates"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2022-01-31 11:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2022-01-31 17:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find all free Schedules",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"array\",\r",
+									"    \"items\": [{\r",
+									"        \"type\": \"object\",\r",
+									"        \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"number\"\r",
+									"        },\r",
+									"        \"tennisCourt\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                \"id\": {\r",
+									"                    \"type\": \"number\"\r",
+									"                },\r",
+									"                \"name\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                }\r",
+									"            },\r",
+									"            \"required\": [\"id\", \"name\"]\r",
+									"        },\r",
+									"        \"startDateTime\": {\r",
+									"            \"type\": \"string\"\r",
+									"        },\r",
+									"        \"endDateTime\": {\r",
+									"            \"type\": \"string\"\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"id\", \"tennisCourt\", \"startDateTime\", \"endDateTime\"]\r",
+									"    }]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/schedules/all-free-schedules",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"schedules",
+								"all-free-schedules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Schedule",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {\r",
+									"  pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tennisCourtId\": 2,\r\n    \"startDateTime\": \"2022-01-29 21:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/schedules",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"schedules"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservation",
+			"item": [
+				{
+					"name": "Find Reservation by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"number\"\r",
+									"        },\r",
+									"        \"schedule\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                \"id\": {\r",
+									"                        \"type\": \"number\"\r",
+									"                    },\r",
+									"                    \"tennisCourt\": {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"properties\": {\r",
+									"                            \"id\": {\r",
+									"                                \"type\": \"number\"\r",
+									"                            },\r",
+									"                            \"name\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            }\r",
+									"                        },\r",
+									"                        \"required\": [\"id\", \"name\"]\r",
+									"                    },\r",
+									"                    \"startDateTime\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"endDateTime\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    }\r",
+									"            },\r",
+									"            \"required\": [\"id\", \"tennisCourt\", \"startDateTime\", \"endDateTime\"]\r",
+									"        },\r",
+									"        \"reservationStatus\": {\r",
+									"            \"type\": \"string\"\r",
+									"        },\r",
+									"        \"value\": {\r",
+									"            \"type\": \"number\"\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"id\", \"schedule\", \"reservationStatus\", \"value\"]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/reservations/{{RESERVATION_ID}}",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"reservations",
+								"{{RESERVATION_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Past Reservations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/reservations/history",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"reservations",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Reservation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", () => {\r",
+									"  pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"guestId\": 1,\r\n    \"scheduleId\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/reservations",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Reservation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"number\"\r",
+									"        },\r",
+									"        \"schedule\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                \"id\": {\r",
+									"                        \"type\": \"number\"\r",
+									"                    },\r",
+									"                    \"tennisCourt\": {\r",
+									"                        \"type\": \"object\",\r",
+									"                        \"properties\": {\r",
+									"                            \"id\": {\r",
+									"                                \"type\": \"number\"\r",
+									"                            },\r",
+									"                            \"name\": {\r",
+									"                                \"type\": \"string\"\r",
+									"                            }\r",
+									"                        },\r",
+									"                        \"required\": [\"id\", \"name\"]\r",
+									"                    },\r",
+									"                    \"startDateTime\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    },\r",
+									"                    \"endDateTime\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                    }\r",
+									"            },\r",
+									"            \"required\": [\"id\", \"tennisCourt\", \"startDateTime\", \"endDateTime\"]\r",
+									"        },\r",
+									"        \"reservationStatus\": {\r",
+									"            \"type\": \"string\"\r",
+									"        },\r",
+									"        \"value\": {\r",
+									"            \"type\": \"number\"\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"id\", \"schedule\", \"reservationStatus\", \"value\"]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/reservations/cancel/{{RESERVATION_ID}}",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"reservations",
+								"cancel",
+								"{{RESERVATION_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reschedule Reservation",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/reservations/reschedule/1/3",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"reservations",
+								"reschedule",
+								"1",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Reservation",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/reservations/complete/2",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"reservations",
+								"complete",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -146,9 +146,13 @@ public class ReservationService {
 
     @Scheduled(cron = "*/30 * * * * *")
     public void cancelPastReservations() {
-        final List<Reservation> reservations = reservationRepository.findReservationsByScheduleStartDateBeforeNow(LocalDateTime.now());
+        final List<Reservation> reservations = reservationRepository.findReservationsByScheduleEndDateBeforeNow(LocalDateTime.now());
         reservations.forEach(reservation -> {
             updateReservation(reservation, new BigDecimal(0), ReservationStatus.UNATTENDED_USER);
         });
+    }
+
+    public List<ReservationDTO> findPastReservations() {
+        return reservationMapper.map(reservationRepository.findReservationsByScheduleEndDateBeforeNow(LocalDateTime.now()));
     }
 }
