@@ -42,8 +42,8 @@ public class ReservationService {
         return reservationMapper.map(reservationRepository.save(reservation));
     }
 
-    public ReservationDTO findReservation(Long reservationId) {
-        return reservationRepository.findById(reservationId).map(reservationMapper::map).orElseThrow(() -> new EntityNotFoundException("Reservation not found."));
+    public ReservationDTO findReservation(final Long id) {
+        return reservationRepository.findById(id).map(reservationMapper::map).orElseThrow(() -> new EntityNotFoundException(String.format("Reservation not found for id =%s.", id)));
     }
 
     public ReservationDTO cancelReservation(Long reservationId) {

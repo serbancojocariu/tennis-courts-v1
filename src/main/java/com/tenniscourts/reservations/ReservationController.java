@@ -4,10 +4,7 @@ import com.tenniscourts.config.BaseRestController;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/reservations")
@@ -22,12 +19,16 @@ public class ReservationController extends BaseRestController {
         return ResponseEntity.created(locationByEntity(reservationService.bookReservation(createReservationRequestDTO).getId())).build();
     }
 
-    public ResponseEntity<ReservationDTO> findReservation(Long reservationId) {
-        return ResponseEntity.ok(reservationService.findReservation(reservationId));
+    @GetMapping(path = "{id}")
+    @ApiOperation(value = "Find reservation by id.")
+    public ResponseEntity<ReservationDTO> findReservation(@PathVariable final Long id) {
+        return ResponseEntity.ok(reservationService.findReservation(id));
     }
 
-    public ResponseEntity<ReservationDTO> cancelReservation(Long reservationId) {
-        return ResponseEntity.ok(reservationService.cancelReservation(reservationId));
+    @PutMapping(path = "cancel/{id}")
+    @ApiOperation(value = "Cancel reservation by id.")
+    public ResponseEntity<ReservationDTO> cancelReservation(@PathVariable Long id) {
+        return ResponseEntity.ok(reservationService.cancelReservation(id));
     }
 
     public ResponseEntity<ReservationDTO> rescheduleReservation(Long reservationId, Long scheduleId) {
